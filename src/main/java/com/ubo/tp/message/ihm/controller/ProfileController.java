@@ -1,14 +1,20 @@
 package main.java.com.ubo.tp.message.ihm.controller;
 
+import java.lang.reflect.Array;
 import java.util.Set;
 
+import javax.swing.JPanel;
+
+import main.java.com.ubo.tp.message.core.database.IDatabase;
 import main.java.com.ubo.tp.message.datamodel.User;
 
 public class ProfileController {
 	protected User currentUser;
+	protected IDatabase database;
 	
-	public ProfileController(User user) {
+	public ProfileController(User user, IDatabase data) {
 		this.currentUser = user;
+		this.database = data;
 	}
 	
 	public String getUserTag() {
@@ -19,16 +25,8 @@ public class ProfileController {
 		return this.currentUser.getName();
 	}
 	
-	public String[] getUserFollows() {
-		int i = 0;
-		String[] retour = {};
-		
-		for(String s : this.currentUser.getFollows()) {
-			retour[i] = s;
-			i = i +1;
-		}
-		
-		return retour;
+	public Set<String> getUserFollows() {
+		return this.currentUser.getFollows();
 	}
 	
 	public String getUserAvatar() {
@@ -37,5 +35,17 @@ public class ProfileController {
 	
 	public void setCurrentUser(User user) {
 		this.currentUser = user;
+	}
+	
+	public User getUserByTag(String tag) {
+		User retour = null;
+		
+		for(User u : this.database.getUsers()) {
+			if(u.getUserTag().equals(tag)) {
+				retour = u;
+			}
+		}
+		
+		return retour;
 	}
 }

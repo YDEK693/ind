@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import main.java.com.ubo.tp.message.core.EntityManager;
 import main.java.com.ubo.tp.message.core.database.IDatabase;
+import main.java.com.ubo.tp.message.datamodel.Message;
 import main.java.com.ubo.tp.message.datamodel.User;
 import main.java.com.ubo.tp.message.ihm.observer.RCObserver;
 import main.java.com.ubo.tp.message.ihm.session.ISessionObserver;
@@ -33,7 +34,7 @@ public class RCController {
 		this.mEntityManager = entityManager;
 		this.mRCObservers = new HashSet<RCObserver>();
 		this.mSessionObservers = new HashSet<ISessionObserver>();
-		this.initTest();
+		//this.initTest();
 	}
 	
 	/**
@@ -72,6 +73,7 @@ public class RCController {
 		User newUser = new User(UUID.randomUUID(), tag, "--", name, new HashSet<>(), avatarPathValue);
 		// Ajout de l'utilisateur Ã  la base
 		this.mDatabase.addUser(newUser);
+		this.mEntityManager.writeUserFile(newUser);
 	}
 	
 
@@ -109,21 +111,60 @@ public class RCController {
 	}
 	
 	protected void initTest() {
-		User u = new User(UUID.randomUUID(), "#1420", "--", "Julien", new HashSet<String>(), "");
+		User u = new User(UUID.randomUUID(), "1420", "--", "Julien", new HashSet<String>(), 
+				"H:/workspace/MessageApp/src/main/resources/images/abeille.png");
 		this.mDatabase.addUser(u);
-		u = new User(UUID.randomUUID(), "#1543", "--", "Jake", new HashSet<String>(), "");
+		this.mEntityManager.writeUserFile(u);
+		Message m = new Message(u, "Encore plus de place dans ma bibliothèque");
+		this.mDatabase.addMessage(m);
+		this.mEntityManager.writeMessageFile(m);
+		m = new Message(u, "Bon j'ai craqué, j'ai pris une case de la rarity collection 2 #YGO");
+		this.mDatabase.addMessage(m);
+		this.mEntityManager.writeMessageFile(m);
+		
+		
+		u = new User(UUID.randomUUID(), "1543", "--", "Jake", new HashSet<String>(), 
+				"H:/workspace/MessageApp/src/main/resources/images/j.PNG");
 		this.mDatabase.addUser(u);
-		u = new User(UUID.randomUUID(), "#1234", "--", "Yoann", new HashSet<String>(), "C:\\Users\\yoann\\Documents\\logo_50.png");
+		this.mEntityManager.writeUserFile(u);
+		m = new Message(u, "Oups j'ai encore acheté un #gundam");
+		this.mDatabase.addMessage(m);
+		this.mEntityManager.writeMessageFile(m);
+		
+		u = new User(UUID.randomUUID(), "1234", "--", "Yoann", new HashSet<String>(), 
+				"H:/workspace/MessageApp/src/main/resources/images/y.png");
 		this.mDatabase.addUser(u);
-		u = new User(UUID.randomUUID(), "#8043", "--", "Justine", new HashSet<String>(), "");
+		this.mEntityManager.writeUserFile(u);
+		m = new Message(u, "@Julien , tu viens au tournoi samedi ? #YGO");
+		this.mDatabase.addMessage(m);
+		this.mEntityManager.writeMessageFile(m);
+		
+		u = new User(UUID.randomUUID(), "8043", "--", "Justine", new HashSet<String>(), 
+				"H:/workspace/MessageApp/src/main/resources/images/ju.PNG");
 		this.mDatabase.addUser(u);
-		u = new User(UUID.randomUUID(), "#3210", "--", "Thï¿½liau", new HashSet<String>(), "");
+		this.mEntityManager.writeUserFile(u);
+		m = new Message(u, "@Julien , on fait des lasagnes ?");
+		this.mDatabase.addMessage(m);
+		this.mEntityManager.writeMessageFile(m);
+		
+		u = new User(UUID.randomUUID(), "3210", "--", "Théliau", new HashSet<String>(), 
+				"H:/workspace/MessageApp/src/main/resources/images/t.PNG");
 		this.mDatabase.addUser(u);
+		this.mEntityManager.writeUserFile(u);
+		m = new Message(u, "Encore un raid ce soir...");
+		this.mDatabase.addMessage(m);
+		this.mEntityManager.writeMessageFile(m);
 	}
 
 	public void openRegister() {
 		for (RCObserver observer : mRCObservers) {
 			observer.openRegister();
+		}
+	}
+	
+	public void goBack() {
+		for (RCObserver observer : mRCObservers) {
+			observer.goBack();
 		}
 	}
 }

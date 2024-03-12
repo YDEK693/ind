@@ -6,10 +6,13 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.List;
+import java.util.Set;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -40,6 +43,7 @@ public class MessageAppMainView extends JFrame {
 	private static final long serialVersionUID = 2055343770028618239L;
 	//vue actuelle
 	protected JPanel currentVue;
+	protected JMenuBar currentBar;
 	
 	public MessageAppMainView(IDatabase database, EntityManager entityManager) {
 		super("MSN");
@@ -66,39 +70,42 @@ public class MessageAppMainView extends JFrame {
 		SwingUtilities.updateComponentTreeUI(this);
 		this.setLayout(new GridBagLayout());
 		this.setVisible(true);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(1000, 1000);
-		//this.setLayout(new FlowLayout());
-		
-		JMenuBar menuBar = new JMenuBar();
-        JMenu fichier = new JMenu("Fichier");
-        JMenu help = new JMenu("?");
-        JMenuItem aPropos = new JMenuItem("� propos");
-        menuBar.add(fichier);
-        menuBar.add(help);
-        help.add(aPropos);
-
-        // Ajout du menu � la fen�tre
-        this.setJMenuBar(menuBar);
-		
-        aPropos.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(MessageAppMainView.this, "N'h�siter pas � me soutenir sur Patreon @HornyBeeAimeL'Argent");
-            }
-        });
-        
-        Button QuitButton = new Button("Quitter");
-        QuitButton.setPreferredSize(new Dimension(100, 50));
-        QuitButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				System.exit(0);
-			}
-		});
-        
-        fichier.add(QuitButton);
-        this.updateMenu(null);
+		ImageIcon avatar = new ImageIcon("H:/workspace/MessageApp/src/main/resources/images/FrameLogo.png");	
+		this.setIconImage(avatar.getImage());
+//		this.setLayout(new FlowLayout());
+//		
+		this.currentBar = new JMenuBar();
+//        JMenu fichier = new JMenu("Fichier");
+//        JMenu help = new JMenu("?");
+//        JMenuItem aPropos = new JMenuItem("A propos");
+//        menuBar.add(fichier);
+//        menuBar.add(help);
+//        help.add(aPropos);
+//
+//        // Ajout du menu � la fen�tre
+//        this.setJMenuBar(menuBar);
+//		
+//        aPropos.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                JOptionPane.showMessageDialog(MessageAppMainView.this, "N'h�siter pas � me soutenir sur Patreon @HornyBeeAimeL'Argent");
+//            }
+//        });
+//        
+//        Button QuitButton = new Button("Quitter");
+//        QuitButton.setPreferredSize(new Dimension(100, 50));
+//        QuitButton.addActionListener(new ActionListener() {
+//
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				System.exit(0);
+//			}
+//		});
+//        
+//        fichier.add(QuitButton);
+//        this.updateMenu(null);
 		//Icon Moche 
 //		ImageIcon icon = new ImageIcon("H:/workspace/MessageApp/src/main/resources/images/exitIcon_20.png");
 //		JLabel textLabel = new JLabel("Quitter");
@@ -155,9 +162,15 @@ public class MessageAppMainView extends JFrame {
 		
 	}
 	
-	protected void updateMenu(JMenuBar bar) {
-		this.setJMenuBar(bar);
+	public void updateMenu(List<JMenu> bar) {
+		this.currentBar.removeAll();
+		
+		for(JMenu menu : bar) {
+			this.currentBar.add(menu);
+		}
+		
+		this.setJMenuBar(this.currentBar);
+		this.revalidate();
+		this.repaint();
 	}
-	
-
 }

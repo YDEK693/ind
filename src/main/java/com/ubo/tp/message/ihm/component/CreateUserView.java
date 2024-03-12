@@ -31,11 +31,16 @@ import main.java.com.ubo.tp.message.ihm.controller.RCController;
 //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 //SwingUtilities.updateComponentTreeUI(this);
 public class CreateUserView extends JPanel {
+	/**
+	 * 
+	 */ 
+	private static final long serialVersionUID = -2372060443249945990L;
 	private JTextField nom;
 	private JTextField tag;
 	private JTextField avatarPath;
 	private JButton submitButton;
 	private RCController createUserController;
+	protected Insets nest = new Insets(5, 5, 5, 5);
 
 	public CreateUserView(RCController createUserController) {
 		this.initGui();
@@ -112,12 +117,26 @@ public class CreateUserView extends JPanel {
 		 * GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(5, 5, 5,
 		 * 5), 0, 0));
 		 */
+		JPanel buttons = new JPanel();
+		JButton bacKButton =  new JButton("Retour");
+		bacKButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				CreateUserView.this.createUserController.goBack();
+				
+			}
+		});
+		
+		buttons.add(bacKButton, new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.WEST,
+				GridBagConstraints.NONE, this.nest, 1, 1));
+		buttons.add(submitButton, new GridBagConstraints(1, 0, 1, 1, 1, 1, GridBagConstraints.EAST,
+				GridBagConstraints.NONE, this.nest, 1, 1));
 
 		add(selectImageButton, new GridBagConstraints(0, 2, 1, 1, 1, 1, GridBagConstraints.CENTER,
 				GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 0, 0));
 		add(avatarPath, new GridBagConstraints(1, 2, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE,
 				new Insets(5, 5, 5, 5), 0, 0));
-		add(submitButton, new GridBagConstraints(0, 3, 2, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE,
+		add(buttons, new GridBagConstraints(0, 3, 2, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE,
 				new Insets(5, 5, 5, 5), 0, 0));
 	}
 

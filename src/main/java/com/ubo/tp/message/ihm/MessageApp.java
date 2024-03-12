@@ -9,11 +9,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -28,10 +31,14 @@ import main.java.com.ubo.tp.message.datamodel.User;
 import main.java.com.ubo.tp.message.ihm.component.ConnectionView;
 import main.java.com.ubo.tp.message.ihm.component.CreateUserView;
 import main.java.com.ubo.tp.message.ihm.component.MenuView;
+import main.java.com.ubo.tp.message.ihm.component.MessageView;
 import main.java.com.ubo.tp.message.ihm.component.ProfileView;
 import main.java.com.ubo.tp.message.ihm.component.ReadMessageView;
+import main.java.com.ubo.tp.message.ihm.component.FiltreView;
+import main.java.com.ubo.tp.message.ihm.component.FollowerManagementView;
 import main.java.com.ubo.tp.message.ihm.component.WriteMessageView;
 import main.java.com.ubo.tp.message.ihm.controller.RCController;
+import main.java.com.ubo.tp.message.ihm.controller.FollowerController;
 import main.java.com.ubo.tp.message.ihm.controller.MenuController;
 import main.java.com.ubo.tp.message.ihm.controller.MessageController;
 import main.java.com.ubo.tp.message.ihm.controller.ProfileController;
@@ -48,7 +55,7 @@ import mock.MessageAppMock;
  * @author S.Lucas
  */
 public class MessageApp implements IDatabaseObserver, IWatchableDirectory, RCObserver, ISessionObserver, MenuObserver, IMessageObserver {
-	Boolean debug = true;
+	Boolean debug = false;
 	protected User userTest = new User(UUID.randomUUID(), "#1420", "--", "Julien", new HashSet<String>(), "");
 	/**
 	 * Base de données.
@@ -89,6 +96,8 @@ public class MessageApp implements IDatabaseObserver, IWatchableDirectory, RCObs
 	protected ProfileController mProfileController;
 
 	protected MenuController mMenuController;
+	
+	protected FollowerController mfollowerController;
 
 	/**
 	 * Constructeur.
@@ -100,32 +109,36 @@ public class MessageApp implements IDatabaseObserver, IWatchableDirectory, RCObs
 		this.mDatabase = database;
 		this.mEntityManager = entityManager;
 		this.mRCController = new RCController(this.mDatabase, this.mEntityManager);
-
 		this.mMessageController = new MessageController(this.mDatabase, this.mEntityManager, null);
-		this.mProfileController = new ProfileController(null);
+		this.mProfileController = new ProfileController(null, database);
 		this.mMenuController = new MenuController();
+		this.mfollowerController = new FollowerController(mDatabase, null, this.mEntityManager);	
 	}
 
 	/**
 	 * Initialisation de l'application.
 	 */
 	public void init() {
-		// Init du look and feel de l'application
-		this.initLookAndFeel();
-
-		// Initialisation du répertoire d'échange
-		this.initDirectory();
-
 		// Initialisation de l'IHM
 		this.initGui();
+		
+		// Initialisation du répertoire d'échange
+		this.initDirectory();
+		
 		// Initialisation des observers
 		this.initObserver();
+		
+		// Init du look and feel de l'application
+		this.initLookAndFeel();
+		
+		//this.initTest();
 	}
 
 	/**
 	 * Initialisation du look and feel de l'application.
 	 */
 	protected void initLookAndFeel() {
+		MenuView menu = new MenuView(this.mMenuController);
 	}
 
 	/**
@@ -133,11 +146,24 @@ public class MessageApp implements IDatabaseObserver, IWatchableDirectory, RCObs
 	 */
 	protected void initGui() {
 		this.mMainView = new MessageAppMainView(mDatabase, mEntityManager);
-
+		
+		
 		if (debug) {
-			String chemin = "C://Users/yoann/OneDrive/Bureau/M2";
-			// String chemin = "H:/Telechargements/IHM/Rep";
-			this.initDirectory(chemin);
+			//String chemin = "C://Users/yoann/OneDrive/Bureau/M2";
+			String chemin = "H:/Telechargements/IHM/Rep";
+			
+			this.mEntityManager.setExchangeDirectory(chemin);
+			
+			File dir = new File(chemin);
+			File[] files = dir.listFiles();
+			Set<File> presentFiles = new HashSet<File>();
+			for(File f : files) {
+				presentFiles.add(f);
+			}
+			
+			this.mEntityManager.notifyPresentFiles(presentFiles);
+			
+			//this.initDirectory(chemin);
 
 		} else {
 			File dir = this.mMainView.selectDirectory();
@@ -146,16 +172,26 @@ public class MessageApp implements IDatabaseObserver, IWatchableDirectory, RCObs
 				dir = this.mMainView.selectDirectory();
 			}
 
-			this.initDirectory(dir.getAbsolutePath());
-		}
+			this.mEntityManager.setExchangeDirectory(dir.getAbsolutePath());
+			
+			File[] files = dir.listFiles();
+			Set<File> presentFiles = new HashSet<File>();
+			for(File f : files) {
+				presentFiles.add(f);
+			}
+			
+			this.mEntityManager.notifyPresentFiles(presentFiles);
 
+			
+			//this.initDirectory(dir.getAbsolutePath());
+		}
 		this.mMainView.initGui();
-		ConnectionView log = new ConnectionView(this.mRCController);
+		//ConnectionView log = new ConnectionView(this.mRCController);
 		// test envoie message
 		// WriteMessageView log = new WriteMessageView(this.mMessageController);
-		MenuView menu = new MenuView(this.mMenuController);
-		this.mMainView.updateMenu(menu);
-		this.mMainView.selectView(log);
+//		MenuView menu = new MenuView(this.mMenuController);
+//		this.mMainView.updateMenu(menu);
+		//this.mMainView.selectView(log);
 	}
 
 	/**
@@ -204,7 +240,15 @@ public class MessageApp implements IDatabaseObserver, IWatchableDirectory, RCObs
 
 	@Override
 	public void notifyMessageAdded(Message addedMessage) {
-		System.out.println(	addedMessage.getSender().getName()+" : " + addedMessage);
+//		System.out.println(	addedMessage.getSender().getName()+" : " + addedMessage.getText());
+//		System.out.println("UserTags :");
+//		for(String s : addedMessage.getUserTags()) {
+//			System.out.println(s);
+//		}
+//		System.out.println("Tags :");
+//		for(String s : addedMessage.getTags()) {
+//			System.out.println(s);
+//		}
 
 	}
 
@@ -222,8 +266,10 @@ public class MessageApp implements IDatabaseObserver, IWatchableDirectory, RCObs
 
 	@Override
 	public void notifyUserAdded(User addedUser) {
-		System.out.println("AddUser" + addedUser);
-
+		//System.out.println("AddUser" + addedUser);
+		ConnectionView log = new ConnectionView(this.mRCController);
+		this.mMainView.selectView(log);
+		
 	}
 
 	@Override
@@ -293,6 +339,8 @@ public class MessageApp implements IDatabaseObserver, IWatchableDirectory, RCObs
 		// this.mProfileController.setCurrentUser(this.currentUser);
 
 		// ProfileView profile = new ProfileView(this.mProfileController);
+		
+		MenuView menu = new MenuView(this.mMenuController, true);
 
 		this.mMainView.selectView(vue);
 	}
@@ -313,12 +361,27 @@ public class MessageApp implements IDatabaseObserver, IWatchableDirectory, RCObs
 	}
 
 	@Override
-	public void switchDeconnexion() {
+	public void switchDeconnexion(List<JMenu> compostion) {
 		System.out.println("Deconnecte");
 		this.currentUser = null;
 		ConnectionView log = new ConnectionView(this.mRCController);
+		this.mMainView.updateMenu(compostion);
 		this.mMainView.selectView(log);
-
+	}
+	
+	@Override
+	public void switchLaunch(List<JMenu> compostion) {
+		System.out.println("Start");
+		ConnectionView log = new ConnectionView(this.mRCController);
+		this.mMainView.updateMenu(compostion);
+		this.mMainView.selectView(log);
+	}
+	
+	@Override
+	public void switchConnexion(List<JMenu> compostion) {
+		System.out.println("Connecte");
+		
+		this.mMainView.updateMenu(compostion);
 	}
 
 	@Override
@@ -331,8 +394,71 @@ public class MessageApp implements IDatabaseObserver, IWatchableDirectory, RCObs
 	public void switchSendMessage() {
 		System.out.println("switchSendMessage");
 		this.mMessageController.setCurrentUser(this.currentUser);
-		WriteMessageView writeMessage = new WriteMessageView(this.mMessageController);
+		
+		MessageView writeMessage = new MessageView(this.mMessageController);
 		this.mMainView.selectView(writeMessage);
 		
+	}
+
+	@Override
+	public void goBack() {
+		ConnectionView log = new ConnectionView(this.mRCController);
+		this.mMainView.selectView(log);
+	}
+	
+	@Override
+	public void switchFollower() {
+		System.out.println("switchSendFollower");
+		this.mfollowerController.setCurrentUser(this.currentUser);
+		
+		FollowerManagementView followView = new FollowerManagementView(this.mfollowerController);
+		this.mMainView.selectView(followView);
+		
+	}
+	
+	protected void initTest() {
+		User u = new User(UUID.randomUUID(), "1420", "--", "Julien", new HashSet<String>(), 
+				"H:/workspace/MessageApp/src/main/resources/images/abeille.png");
+		this.mDatabase.addUser(u);
+		this.mEntityManager.writeUserFile(u);
+		Message m = new Message(u, "Encore plus de place dans ma biblioth�que");
+		this.mDatabase.addMessage(m);
+		this.mEntityManager.writeMessageFile(m);
+		m = new Message(u, "Bon j'ai craqu�, j'ai pris une case de la rarity collection 2 #YGO");
+		this.mDatabase.addMessage(m);
+		this.mEntityManager.writeMessageFile(m);
+		
+		
+		u = new User(UUID.randomUUID(), "1543", "--", "Jake", new HashSet<String>(), 
+				"H:/workspace/MessageApp/src/main/resources/images/j.PNG");
+		this.mDatabase.addUser(u);
+		this.mEntityManager.writeUserFile(u);
+		m = new Message(u, "Oups j'ai encore achet� un #gundam");
+		this.mDatabase.addMessage(m);
+		this.mEntityManager.writeMessageFile(m);
+		
+		u = new User(UUID.randomUUID(), "1234", "--", "Yoann", new HashSet<String>(), 
+				"H:/workspace/MessageApp/src/main/resources/images/y.png");
+		this.mDatabase.addUser(u);
+		this.mEntityManager.writeUserFile(u);
+		m = new Message(u, "@Julien , tu viens au tournoi samedi ? #YGO");
+		this.mDatabase.addMessage(m);
+		this.mEntityManager.writeMessageFile(m);
+		
+		u = new User(UUID.randomUUID(), "8043", "--", "Justine", new HashSet<String>(), 
+				"H:/workspace/MessageApp/src/main/resources/images/ju.PNG");
+		this.mDatabase.addUser(u);
+		this.mEntityManager.writeUserFile(u);
+		m = new Message(u, "@Julien , on fait des lasagnes ?");
+		this.mDatabase.addMessage(m);
+		this.mEntityManager.writeMessageFile(m);
+		
+		u = new User(UUID.randomUUID(), "3210", "--", "Th�liau", new HashSet<String>(), 
+				"H:/workspace/MessageApp/src/main/resources/images/t.PNG");
+		this.mDatabase.addUser(u);
+		this.mEntityManager.writeUserFile(u);
+		m = new Message(u, "Encore un raid ce soir...");
+		this.mDatabase.addMessage(m);
+		this.mEntityManager.writeMessageFile(m);
 	}
 }
