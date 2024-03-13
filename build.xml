@@ -1,0 +1,37 @@
+<project default="run">
+
+<target name="clean">
+    <delete dir="bin"/>
+    <delete dir="exe"/>
+</target>
+
+
+<target name="compile" depends="clean">
+    <mkdir dir="bin"/>
+    <javac srcdir="src" destdir="bin">
+        <classpath>
+                <!-- Add your external JAR files here -->
+                <!--<pathelement location="C:\Users\yoann\Downloads\jaxb-ri-2.3.1\jaxb-ri\mod\*.jar"/>-->
+                <fileset dir="C:\Users\yoann\Downloads\jaxb-ri-2.3.1\jaxb-ri\mod\">
+                    <include name="*.jar"/>
+                </fileset>
+        </classpath>
+    </javac>
+</target>
+
+
+<target name="jar" depends="compile">
+    <mkdir dir="exe"/>
+    <jar destfile="exe/MessageAppLauncher.jar" basedir="bin">
+        <manifest>
+            <attribute name="Main-Class" value="main.java.com.ubo.tp.message.MessageAppLauncher"/>
+        </manifest>
+    </jar>
+</target>
+
+
+<target name="run" depends="jar">
+    <java jar="exe/MessageAppLauncher.jar" fork="true"/>
+</target>
+
+</project>
