@@ -47,7 +47,7 @@ import main.java.com.ubo.tp.message.ihm.observer.MenuObserver;
 import main.java.com.ubo.tp.message.ihm.observer.RCObserver;
 import main.java.com.ubo.tp.message.ihm.session.ISessionObserver;
 import main.java.com.ubo.tp.message.ihm.session.Session;
-import mock.MessageAppMock;
+
 
 /**
  * Classe principale l'application.

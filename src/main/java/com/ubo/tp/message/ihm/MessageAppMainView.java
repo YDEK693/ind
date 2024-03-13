@@ -31,7 +31,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 import main.java.com.ubo.tp.message.core.EntityManager;
 import main.java.com.ubo.tp.message.core.database.IDatabase;
 import main.java.com.ubo.tp.message.ihm.component.CreateUserView;
-import mock.MessageAppMock;
 
 /**
  * Classe de la vue principale de l'application.
