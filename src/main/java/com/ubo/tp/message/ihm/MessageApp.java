@@ -421,10 +421,10 @@ public class MessageApp implements IDatabaseObserver, IWatchableDirectory, RCObs
 				"H:/workspace/MessageApp/src/main/resources/images/abeille.png");
 		this.mDatabase.addUser(u);
 		this.mEntityManager.writeUserFile(u);
-		Message m = new Message(u, "Encore plus de place dans ma biblioth�que");
+		Message m = new Message(u, "Encore plus de place dans ma bibliothéque");
 		this.mDatabase.addMessage(m);
 		this.mEntityManager.writeMessageFile(m);
-		m = new Message(u, "Bon j'ai craqu�, j'ai pris une case de la rarity collection 2 #YGO");
+		m = new Message(u, "Bon j'ai craqué, j'ai pris une case de la rarity collection 2 #YGO");
 		this.mDatabase.addMessage(m);
 		this.mEntityManager.writeMessageFile(m);
 		
@@ -433,7 +433,7 @@ public class MessageApp implements IDatabaseObserver, IWatchableDirectory, RCObs
 				"H:/workspace/MessageApp/src/main/resources/images/j.PNG");
 		this.mDatabase.addUser(u);
 		this.mEntityManager.writeUserFile(u);
-		m = new Message(u, "Oups j'ai encore achet� un #gundam");
+		m = new Message(u, "Oups j'ai encore acheté un #gundam");
 		this.mDatabase.addMessage(m);
 		this.mEntityManager.writeMessageFile(m);
 		
@@ -453,7 +453,7 @@ public class MessageApp implements IDatabaseObserver, IWatchableDirectory, RCObs
 		this.mDatabase.addMessage(m);
 		this.mEntityManager.writeMessageFile(m);
 		
-		u = new User(UUID.randomUUID(), "3210", "--", "Th�liau", new HashSet<String>(), 
+		u = new User(UUID.randomUUID(), "3210", "--", "Théliau", new HashSet<String>(), 
 				"H:/workspace/MessageApp/src/main/resources/images/t.PNG");
 		this.mDatabase.addUser(u);
 		this.mEntityManager.writeUserFile(u);

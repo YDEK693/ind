@@ -52,7 +52,7 @@ public class ConnectionView extends JPanel {
 				}
 			}
 		});
-		JButton registerButton =  new JButton("Créer un compte");
+		JButton registerButton =  new JButton("CrÃ©er un compte");
 		registerButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {

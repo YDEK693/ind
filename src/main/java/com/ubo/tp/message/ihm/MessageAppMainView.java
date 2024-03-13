@@ -141,7 +141,7 @@ public class MessageAppMainView extends JFrame {
 			// R�cup�rer le dossier s�lectionn�
 			selectedDirectory = fileChooser.getSelectedFile();
 			JOptionPane.showMessageDialog(MessageAppMainView.this,
-					"Dossier s�lectionn� : " + selectedDirectory.getAbsolutePath());
+					"Dossier sélectionné : " + selectedDirectory.getAbsolutePath());
 		}
 		
 		return selectedDirectory;

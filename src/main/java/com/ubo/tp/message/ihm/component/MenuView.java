@@ -85,7 +85,7 @@ public class MenuView extends JMenuBar {
 				MenuView.this.controller.switchProfile();
 			}
 		});
-        JMenuItem logoutButton = new JMenuItem("Déconnexion");
+        JMenuItem logoutButton = new JMenuItem("DÃ©connexion");
         logoutButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -128,7 +128,7 @@ public class MenuView extends JMenuBar {
         aPropos.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-             JOptionPane.showMessageDialog(MenuView.this, "N'hésiter pas à me soutenir sur Patreon @HornyBeeAimeL'Argent");  
+             JOptionPane.showMessageDialog(MenuView.this, "N'hÃ©siter pas Ã  me soutenir sur Patreon @HornyBeeAimeL'Argent");  
             }
         }); 
         help.add(aPropos);
