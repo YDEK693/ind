@@ -115,10 +115,10 @@ public class RCController {
 				"H:/workspace/MessageApp/src/main/resources/images/abeille.png");
 		this.mDatabase.addUser(u);
 		this.mEntityManager.writeUserFile(u);
-		Message m = new Message(u, "Encore plus de place dans ma bibliothèque");
+		Message m = new Message(u, "Encore plus de place dans ma bibliothÃ©que");
 		this.mDatabase.addMessage(m);
 		this.mEntityManager.writeMessageFile(m);
-		m = new Message(u, "Bon j'ai craqué, j'ai pris une case de la rarity collection 2 #YGO");
+		m = new Message(u, "Bon j'ai craquÃ©, j'ai pris une case de la rarity collection 2 #YGO");
 		this.mDatabase.addMessage(m);
 		this.mEntityManager.writeMessageFile(m);
 		
@@ -127,7 +127,7 @@ public class RCController {
 				"H:/workspace/MessageApp/src/main/resources/images/j.PNG");
 		this.mDatabase.addUser(u);
 		this.mEntityManager.writeUserFile(u);
-		m = new Message(u, "Oups j'ai encore acheté un #gundam");
+		m = new Message(u, "Oups j'ai encore achetÃ© un #gundam");
 		this.mDatabase.addMessage(m);
 		this.mEntityManager.writeMessageFile(m);
 		
@@ -147,7 +147,7 @@ public class RCController {
 		this.mDatabase.addMessage(m);
 		this.mEntityManager.writeMessageFile(m);
 		
-		u = new User(UUID.randomUUID(), "3210", "--", "Théliau", new HashSet<String>(), 
+		u = new User(UUID.randomUUID(), "3210", "--", "ThÃ©liau", new HashSet<String>(), 
 				"H:/workspace/MessageApp/src/main/resources/images/t.PNG");
 		this.mDatabase.addUser(u);
 		this.mEntityManager.writeUserFile(u);

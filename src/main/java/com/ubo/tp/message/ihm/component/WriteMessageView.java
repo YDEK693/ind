@@ -61,7 +61,7 @@ public class WriteMessageView extends JPanel{
 					JOptionPane.showMessageDialog(WriteMessageView.this, "message trop long",
 							"Erreur", JOptionPane.ERROR_MESSAGE);
 				}else if (!messageField.getText().isEmpty()) {
-					JOptionPane.showMessageDialog(WriteMessageView.this, "message envoyé",
+					JOptionPane.showMessageDialog(WriteMessageView.this, "message envoyÃ©",
 							"Valide", JOptionPane.INFORMATION_MESSAGE);
 					WriteMessageView.this.controller.sendMessage(messageField.getText());
 					messageField.setText("");
