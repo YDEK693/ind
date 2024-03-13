@@ -204,9 +204,9 @@ fi
 #   * put everything else in single quotes, so that it's not re-expanded.
 
 set -- \
-        "-Dorg.gradle.appname=$APP_BASE_NAME" \
+        "-D org.gradle.appname=$APP_BASE_NAME" \
         -classpath "$CLASSPATH" \
-        main.java.com.ubo.tp.message.MessageAppLauncher \
+        org.gradle.wrapper.GradleWrapperMain \
         "$@"
 
 # Stop when "xargs" is not available.
